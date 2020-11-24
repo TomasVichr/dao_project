@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    {% include "url_parsing_app/js_ajax.html" %}
+    {% include "url_parsing_app/js_ajax_datatables.html" %}
+</head>
+<body>
+
+    <div id="AJAX_form_container">
+        <h1>Page parsing</h1>
+        <form action="" id="AJAX_form" method="POST">
+            {% csrf_token %}
+            {{form}}
+            <input Type="submit" value="Go">
+        </form>
+    </div>
+
+    <hr>
+
+    <form action="/gd/" method="get">
+        <button type="submit">Show data on a new page</button>
+    </form>
+    <form id="AJAX_datatables" action="/gd/" method="get">
+        <button type="submit">Show data ajax</button>
+    </form>
+
+    <hr>
+
+    <div id="AJAX_datatables_load_container"></div>
+
+</body>
+</html>

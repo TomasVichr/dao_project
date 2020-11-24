@@ -1,0 +1,101 @@
+{# ===== Ajax for form and it s answer (alert) ===== #}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript"> //ajax form outer func
+    $(document).ready(function() {
+        $('#AJAX_form').on('submit', function(event){
+            event.preventDefault();
+            ajax_form_request();
+        });
+    });
+</script>
+
+<script type="text/javascript"> //ajax form request
+    function ajax_form_request() {
+        $.ajax({
+            url : "",
+            type : "POST",
+            data : {
+                parsed_url : $('#id_parsed_url').val(),
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+            }, //data sent with post request
+
+            success : function(json) {
+                $('#id_parsed_url').val(''); // removes value from the input
+
+                if (json.hasOwnProperty('message_to_user')){
+                    my_string = reportable_string_from_json_obj(json);
+                } else {
+                    my_string = ordered_string_from_json_obj(json);
+                }
+                alert(my_string);
+            },
+
+            error : function(jqXHR,textStatus_string, errorThrown_string) {
+                json = jqXHR.responseJSON
+
+                if (json.hasOwnProperty('message_to_user')){
+                    my_string = reportable_string_from_json_obj(json);
+                } else {
+                    my_string = ordered_string_from_json_obj(json);
+                }
+                alert(my_string);
+            }
+        });
+    };
+</script>
+
+<script type="text/javascript"> //answer formatting
+    function ordered_string_from_json_obj(json) {
+        var my_string = "";
+        for (key in json){
+           my_string += key + ": " + json[key] + '\n';
+        }
+        return(my_string)
+    }
+</script>
+
+<script type="text/javascript"> //answer formatting
+        function reportable_string_from_json_obj(json) {
+            var my_string = json['message_to_user'] + '\n';
+            my_string += "---------------" + '\n';
+            for (key in json){
+                if (key != 'message_to_user'){
+                    my_string += key + ": " + json[key] + '\n';
+                }
+            }
+            return(my_string)
+        }
+</script>
+
+
+{# ===== Ajax for dataTables ===== #}
+<script type="text/javascript"> //ajax datatables outer func
+    $(document).ready(function() {
+        $('#AJAX_datatables').on('submit', function(event){
+            event.preventDefault();
+            ajax_datatables_request();
+        });
+    });
+</script>
+
+<script type="text/javascript"> //ajax datatables request
+    function ajax_datatables_request() {
+        $.ajax({
+            url: "/gd/",
+            method: 'GET',
+            dataType: 'html',
+
+            success: function(result) {
+                $("#AJAX_datatables_load_container").empty();
+                $("#AJAX_datatables_load_container").append(result);
+            },
+            error : function(jqXHR,textStatus_string, errorThrown_string) {
+                $("#AJAX_datatables_load_container").append(textStatus_string);
+                $("#AJAX_datatables_load_container").append(errorThrown_string);
+                $("#AJAX_datatables_load_container").append(jqXHR);
+            }
+         });
+    };
+</script>
+

@@ -1,0 +1,34 @@
+{% extends "url_parsing_app/PageInfoModel_list_outer_page.html" %}
+
+{% block scripts %}
+    {% include "url_parsing_app/js_ajax_datatables.html" %}
+{% endblock %}
+
+
+{% block content %}
+<table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>URL</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>OG: Site Name</th>
+            <th>Image URL</th>
+            <th>Entry Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for PageInfoModel in object_list %}
+            <tr>
+                <td>{{ PageInfoModel.parsed_url }}</td>
+                <td>{{ PageInfoModel.title }}</td>
+                <td>{{ PageInfoModel.description }}</td>
+                <td>{{ PageInfoModel.site_name }}</td>
+                <td>{{ PageInfoModel.image_url }}</td>
+                <td>{{ PageInfoModel.date }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content%}
+
